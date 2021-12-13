@@ -1,52 +1,86 @@
 import { Injectable } from '@nestjs/common';
-import { Board, Cell } from './lib/types';
+import { Board } from './lib/types';
 
 @Injectable()
 export class AppService {
-  largestRectangle(board: Board): Cell[] {
-    const clusters = [];
-    let cell = null;
-    let cellValue = 0;
+  largestRectangle(board: Board): any {
+    const R = board.length; // Row length
+    const C = board[0].length; // Column length
+    const M = board; // Matrix
 
-    for (let x = 0; x < board.length; x++) {
-      for (let y = 0; y < board[0].length; y++) {
-        cellValue = board[x][y];
+    const S = Array(R)
+      .fill(null)
+      .map(() => Array(C).fill(0));
 
-        if (cellValue == 0) continue;
+    // for (let y = 0; y < R; y++) {
+    //   S[y] = [];
+    //   for (let x = 0; x < C; x++) {
+    //     S[y][x] = 0;
+    //   }
+    // }
+    let maxOfS: number, maxI: number, maxJ: number;
 
-        cell = { x, y };
-        let clusterFound = false;
+    /* Copy first row of M to S*/
+    S[0] = [...M[0]];
 
-        for (let i = clusters.length - 1; i >= 0; i--) {
-          const cluster = clusters[i];
-          for (const point of cluster) {
-            if (this.isNeighbour(point, cell)) {
-              cluster.push(cell);
-              clusterFound = true;
-              break;
-            }
-          }
-          if (clusterFound) break;
-        }
-        if (!clusterFound) clusters.push([cell]);
+    /* Copy first column of M to S*/
+    let i: number, j: number;
+    for (i = 0; i < R; i++) S[i][0] = M[i][0];
+
+    /* Construct other entries of S*/
+    for (i = 1; i < R; i++) {
+      for (j = 1; j < C; j++) {
+        if (M[i][j] == 1)
+          S[i][j] =
+            Math.min(S[i][j - 1], Math.min(S[i - 1][j], S[i - 1][j - 1])) + 1;
+        else S[i][j] = 0;
       }
     }
 
-    const largest = clusters.reduce((prev, curr) => {
-      return prev.length < curr.length ? curr : prev;
-    }, []);
+    /* Find the maximum entry, and indexes of maximum entry in S */
+    maxOfS = S[0][0];
+    maxI = 0;
+    maxJ = 0;
+    for (i = 0; i < R; i++) {
+      for (j = 0; j < C; j++) {
+        if (maxOfS < S[i][j]) {
+          maxOfS = S[i][j];
+          maxI = i;
+          maxJ = j;
+        }
+      }
+    }
 
-    return largest;
-  }
+    const subMatrix = [];
 
-  isNeighbour(pointA: Cell, pointB: Cell): boolean {
-    const pointBTop = JSON.stringify({ ...pointB, x: pointB.x - 1 });
-    const pointBRight = JSON.stringify({ ...pointB, y: pointB.y + 1 });
-    const pointBBottom = JSON.stringify({ ...pointB, x: pointB.x + 1 });
-    const pointBLeft = JSON.stringify({ ...pointB, y: pointB.y - 1 });
+    for (let i = maxI; i > maxI - maxOfS; i--) {
+      for (let j = maxJ; j > maxJ - maxOfS; j--) {
+        subMatrix.push({
+          x: i,
+          y: j,
+        });
+      }
+    }
 
-    return [pointBTop, pointBRight, pointBBottom, pointBLeft].includes(
-      JSON.stringify(pointA),
-    );
+    return subMatrix;
   }
 }
+
+const board: Board = [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
+  [0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1],
+  [0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+  [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+];
+new AppService().largestRectangle(board);
