@@ -47,14 +47,14 @@ export class AppService {
       w = 0;
     let k = maxI;
     while (true) {
-      if (S[k][maxJ] == 0) break;
+      if ((S[k] && S[k][maxJ] && S[k][maxJ] == 0) || k == 0) break;
       k--;
       h++;
     }
 
     k = maxJ;
     while (true) {
-      if (S[maxI][k] == 0) break;
+      if ((S[k] && S[k][maxJ] && S[maxI][k] == 0) || k == 0) break;
       k--;
       w++;
     }
