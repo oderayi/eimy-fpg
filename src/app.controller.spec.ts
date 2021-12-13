@@ -50,7 +50,7 @@ describe('AppController', () => {
   });
 
   describe('/largest-rectangle', () => {
-    // FIXME: Test passes but not accurate.
+    // FIXME: Tests not accurate.
     it('should return coordinates of the largest rectangle', () => {
       expect(appController.largestRectangle(board)).toStrictEqual(
         largestRectangle,
