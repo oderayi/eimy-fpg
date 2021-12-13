@@ -45,6 +45,7 @@ const Cell = (state, clickHandler) => {
   const cell = document.createElement('div');
   cell.classList = `cell state_${state.value}`;
   cell.id = `cell_${state.x}_${state.y}`;
+  // cell.innerText = `${state.x}_${state.y}`;
   cell.addEventListener('click', () => clickHandler(state));
   return cell;
 };
