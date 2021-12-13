@@ -22,9 +22,6 @@ describe('AppController', () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   ];
-  const emptyBoard = Array(15)
-    .fill(null)
-    .map(() => Array(15).fill(0));
   const largestRectangle = [
     {
       x: 5,
@@ -136,7 +133,18 @@ describe('AppController', () => {
       );
     });
     it('should return empty list with zero selected cells', () => {
+      const emptyBoard = Array(15)
+        .fill(null)
+        .map(() => Array(15).fill(0));
       expect(appController.largestRectangle(emptyBoard)).toStrictEqual([]);
+    });
+    it('should return entire board on fully selected board', () => {
+      const fullySelectedBoard = Array(15)
+        .fill(null)
+        .map(() => Array(15).fill(1));
+      expect(appController.largestRectangle(fullySelectedBoard).length).toBe(
+        15 * 15,
+      );
     });
   });
 });
