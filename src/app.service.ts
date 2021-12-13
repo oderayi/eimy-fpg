@@ -25,7 +25,8 @@ export class AppService {
           const top = S[i - 1][j];
           const topLeft = S[i - 1][j - 1];
           const left = S[i][j - 1];
-          S[i][j] = Math.min(left, Math.min(top, topLeft)) + 1;
+          // S[i][j] = Math.min(left, Math.min(top, topLeft)) + 1;
+          S[i][j] = Math.min(left, top) + 1;
         } else S[i][j] = 0;
       }
     }
