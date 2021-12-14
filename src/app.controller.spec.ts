@@ -22,28 +22,7 @@ describe('AppController', () => {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   ];
-  const largestRectangle = [
-    { x: 8, y: 8 },
-    { x: 8, y: 7 },
-    { x: 8, y: 6 },
-    { x: 8, y: 5 },
-    { x: 8, y: 4 },
-    { x: 7, y: 8 },
-    { x: 7, y: 7 },
-    { x: 7, y: 6 },
-    { x: 7, y: 5 },
-    { x: 7, y: 4 },
-    { x: 6, y: 8 },
-    { x: 6, y: 7 },
-    { x: 6, y: 6 },
-    { x: 6, y: 5 },
-    { x: 6, y: 4 },
-    { x: 5, y: 8 },
-    { x: 5, y: 7 },
-    { x: 5, y: 6 },
-    { x: 5, y: 5 },
-    { x: 5, y: 4 },
-  ];
+  const largestRectangle = { area: 20, top: 5, bottom: 8, left: 4, right: 8 };
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
@@ -63,7 +42,13 @@ describe('AppController', () => {
       const emptyBoard = Array(15)
         .fill(null)
         .map(() => Array(15).fill(0));
-      expect(appController.largestRectangle(emptyBoard)).toStrictEqual([]);
+      expect(appController.largestRectangle(emptyBoard)).toStrictEqual({
+        area: 1,
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+      });
     });
   });
 });

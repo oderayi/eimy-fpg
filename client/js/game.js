@@ -72,11 +72,26 @@ const applyState = async (boardState, newState) => {
   }
 
   // Highlight red-spots on the new board (in-memory)
-  const largestRec = await largestRectangle(newBoard);
+  const { area: _, top, bottom, left, right } = await largestRectangle(newBoard);
+
+  console.log(top, bottom, left, right);
+
+  // Build matrix for hotspot
+  const largestRec = [];
+  for (let i = top; i <= bottom; i++) {
+    for (let j = left; j <= right; j++) {
+      largestRec.push({
+        x: i,
+        y: j
+      });
+    }
+  }
 
   for (let point of largestRec) {
     newBoard[point.x][point.y] = 2;
   }
+
+  console.log(largestRec);
 
   return { board: newBoard, largestRectangle: largestRec };
 };
