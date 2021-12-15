@@ -12,7 +12,7 @@ export class AppService {
     let bottom = 0;
 
     // Calculate area for first row
-    // and initialize it as result
+    // and initialize it as area
     let { area, left, right } = this.maxHist(C, A[0]);
 
     // iterate over row to find
@@ -20,14 +20,13 @@ export class AppService {
     // considering each row as histogram
     for (let i = 1; i < R; i++) {
       for (let j = 0; j < C; j++) {
-        // if A[i][j] is 1 then
-        // add A[i -1][j]
+        // if A[i][j] is 1 then add A[i -1][j]
         if (A[i][j] == 1) {
           A[i][j] += A[i - 1][j];
         }
       }
 
-      // Update result if area with current
+      // Update area if area with current
       // row (as last row of rectangle) is more
       const {
         area: tmp_area,
@@ -87,13 +86,13 @@ export class AppService {
         // bar. 'i' is 'right index' for
         // the top and element before
         // top in stack is 'left index'
-        left = hist[hist.length - 1]; // **check
+        left = hist[hist.length - 1];
         top_val = row[hist[hist.length - 1]];
         hist.pop();
         area = top_val * i;
 
         if (hist.length > 0) {
-          left = hist[hist.length - 1] + 1; // check
+          left = hist[hist.length - 1] + 1;
           area = top_val * (i - hist[hist.length - 1]);
         }
 

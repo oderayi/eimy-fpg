@@ -72,9 +72,16 @@ const applyState = async (boardState, newState) => {
   }
 
   // Highlight red-spots on the new board (in-memory)
-  const { area: _, top, bottom, left, right } = await largestRectangle(newBoard);
+  const {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    area: _,
+    top,
+    bottom,
+    left,
+    right,
+  } = await largestRectangle(newBoard);
 
-  console.log(top, bottom, left, right);
+  // console.log(area, top, bottom, left, right);
 
   // Build matrix for hotspot
   const largestRec = [];
@@ -82,7 +89,7 @@ const applyState = async (boardState, newState) => {
     for (let j = left; j <= right; j++) {
       largestRec.push({
         x: i,
-        y: j
+        y: j,
       });
     }
   }
@@ -90,8 +97,6 @@ const applyState = async (boardState, newState) => {
   for (let point of largestRec) {
     newBoard[point.x][point.y] = 2;
   }
-
-  console.log(largestRec);
 
   return { board: newBoard, largestRectangle: largestRec };
 };
@@ -125,7 +130,7 @@ const largestRectangle = async (board) => {
       },
       body: JSON.stringify(board),
     });
-    const largest = response.json();
+    const largest = await response.json();
     return largest;
   } catch (error) {
     console.log(error.message);
@@ -182,6 +187,6 @@ const newBoardState = [
   { x: 12, y: 3, value: 1 },
 ];
 
-applyState({ board }, newBoardState).then((boardState) =>
-  refreshBoard(boardState),
-);
+applyState({ board }, newBoardState).then((boardState) => {
+  refreshBoard(boardState);
+});
