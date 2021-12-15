@@ -95,7 +95,7 @@ const applyState = async (boardState, newState) => {
   }
 
   for (let point of largestRec) {
-    newBoard[point.x][point.y] = 2;
+    if (newBoard[point.x][point.y] == 1) newBoard[point.x][point.y] = 2;
   }
 
   return { board: newBoard, largestRectangle: largestRec };
